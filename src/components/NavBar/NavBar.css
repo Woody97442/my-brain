@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+header {
+  width: 100%;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+  padding-left: 1rem /* 16px */;
+  padding-right: 1rem /* 16px */;
+}
+
+@media (max-width: 430px) {
+  header {
+    justify-content: center;
+  }
+  .logo {
+    display: none;
+  }
+}
