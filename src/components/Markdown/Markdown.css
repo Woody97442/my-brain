@@ -3,7 +3,10 @@
 @tailwind utilities;
 
 .markdown-content {
-  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 0.6rem;
   width: 100%;
 }
 
@@ -132,6 +135,10 @@ pre > div:hover {
   -moz-border-radius: 6px 0px 0px 6px;
   padding: 0.8rem;
   color: white;
+}
+
+.codePen {
+  display: none;
 }
 
 @media (max-width: 430px) {

@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import SideBar from "../components/SideBar/SideBar";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
+import Lab from "../components/Lab/Lab";
 
 function HomePage() {
   const categories = useSelector((state) => state.dataCat.categories);
@@ -31,6 +32,7 @@ function HomePage() {
         {/* <Caontainer /> */}
         <div className="detail">
           <Outlet />
+          <Lab active={false} />
         </div>
 
         {/* <Footer /> */}

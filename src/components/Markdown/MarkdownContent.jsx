@@ -11,14 +11,15 @@ import "./Markdown.css";
 const MarkdownContent = ({ markdownContent }) => {
   const [copy, setCopy] = useState(false);
   const elementRef = useRef(null);
+  const iframeRefs = useRef([]);
 
-  useEffect(() => {
-    const element = elementRef.current;
+  const createDynamicAlert = (element) => {
     if (element) {
-      // Utiliser querySelectorAll pour récupérer toutes les balises <p> contenant le texte '-aler-'
       element.querySelectorAll("p").forEach((paragraph) => {
+        paragraph.removeAttribute("class");
+        // Vérifier si le texte contient le texte '-alert-'
         if (paragraph.textContent.includes("-alert-")) {
-          // Supprimer le texte '-aler-' des balises <p>
+          // Supprimer le texte '-alert-' des balises <p>
           paragraph.textContent = paragraph.textContent.replace("-alert-", "");
 
           // Ajouter la classe 'alert' aux balises <p> qui ne la possèdent pas déjà
@@ -28,7 +29,47 @@ const MarkdownContent = ({ markdownContent }) => {
         }
       });
     }
-  });
+  };
+
+  const createDynamicIframes = (element) => {
+    if (element) {
+      element.querySelectorAll("p").forEach((paragraph) => {
+        if (paragraph.textContent.includes("-codePen-")) {
+          paragraph.removeAttribute("class");
+          paragraph.textContent = paragraph.textContent.replace("-codePen-", "");
+          const param = JSON.parse(paragraph.textContent);
+          paragraph.classList.add("codePen");
+
+          if (param && param.src) {
+            const iframeElement = document.createElement("iframe");
+            iframeElement.height = param.height;
+            iframeElement.src = param.src;
+            iframeElement.classList.add("codePenIframe");
+
+            iframeRefs.current.push(iframeElement);
+            paragraph.insertAdjacentElement("afterend", iframeElement);
+          }
+        }
+      });
+    }
+  };
+
+  const cleanupDynamicIframes = () => {
+    iframeRefs.current.forEach((iframe) => {
+      console.log("Cleanup", iframe.parentElement);
+      if (iframe.parentElement) {
+        iframe.parentElement.removeChild(iframe);
+      }
+    });
+  };
+
+  useEffect(() => {
+    const element = elementRef.current;
+    createDynamicAlert(element);
+    createDynamicIframes(element);
+
+    return cleanupDynamicIframes;
+  }, [markdownContent]);
 
   return (
     <div className="markdown-content" ref={elementRef}>
